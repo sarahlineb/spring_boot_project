@@ -1,0 +1,204 @@
+<html>
+<head>
+<title>myControllers.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #808080;}
+.s3 { color: #6a8759;}
+.s4 { color: #6897bb;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+myControllers.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com.springbootproject.controller</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">com.fasterxml.jackson.core.JsonProcessingException</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.springbootproject.theData.Question</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.springbootproject.theData.theAnswer</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">org.springframework.web.bind.annotation.*</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">javax.servlet.http.HttpServletRequest</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.time.LocalDateTime</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.time.format.DateTimeFormatter</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">com.fasterxml.jackson.databind.ObjectMapper</span><span class="s0">;   </span><span class="s2">// access Jackson Object to JSON converter classes</span>
+<span class="s0">import </span><span class="s1">com.fasterxml.jackson.databind.ObjectWriter</span><span class="s0">;   </span><span class="s2">// access Jackson Object to JSON converter classes</span>
+
+<span class="s2">// Data may be sent with an HTTP request:</span>
+<span class="s2">//</span>
+<span class="s2">//     GET or DELETE - data is in the URL as a query parameter - ?name=value</span>
+<span class="s2">//     POST or PUT   - data is in the request body of the request  - use @RequestBody in method parameters</span>
+<span class="s2">//</span>
+<span class="s2">// Java deals with objects, servers deal with JSON</span>
+<span class="s2">// The Spring Boot will automatically convert between Java objects and JSON</span>
+<span class="s2">//     for request and response data</span>
+<span class="s2">//</span>
+<span class="s2">// Java classes that are used in server request/response should be POJOs.</span>
+<span class="s2">//</span>
+<span class="s2">// A POJO has a default ctor, standard getters and setters</span>
+<span class="s2">//        optional .equals(), .hashCode(), .toSting() overrides</span>
+
+<span class="s2">// Receiving an HttpServletRequest object as the first parameter to a controller method</span>
+<span class="s2">//     will allow access to HTTP request sent to the server.</span>
+<span class="s2">//     methods associated with this object maybe used to gain access to information about the request</span>
+<span class="s2">//     The logRequest method near the end of this file demonstrates accessing some of the information</span>
+<span class="s2">//         and writing it to the server log.</span>
+
+<span class="s1">@RestController  </span><span class="s2">// Tell server there are controllers in this class</span>
+<span class="s0">public class </span><span class="s1">myControllers {</span>
+
+    <span class="s2">// Method to handle HTTP GET requests for the root path (&quot;/&quot;)</span>
+    <span class="s2">// HttpServletRequest as the first parameter to teh method allows access to HTTP request information</span>
+    <span class="s2">//             using the object name specified</span>
+    <span class="s1">@GetMapping(value=</span><span class="s3">&quot;/&quot;</span><span class="s1">)</span>
+    <span class="s0">public </span><span class="s1">String aBoringName(HttpServletRequest theRequest) {  </span><span class="s2">// method name does not matter - it's not used anywhere except error message</span>
+
+        <span class="s1">logRequest(theRequest)</span><span class="s0">;   </span><span class="s2">// Write HTTP request to log</span>
+
+       <span class="s0">return </span><span class="s3">&quot;Attendance code for today is 4122&quot;</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">// Method to handle HTTP GET requests for the path &quot;/tuesday&quot;</span>
+    <span class="s2">// HttpServletRequest as the first parameter to teh method allows access to HTTP request information</span>
+    <span class="s2">//             using the object name specified</span>
+    <span class="s1">@GetMapping(value=</span><span class="s3">&quot;/tuesday&quot;</span><span class="s1">)</span>
+    <span class="s0">public </span><span class="s1">String nameDoesMatter(HttpServletRequest theRequest) {</span>
+        <span class="s1">logRequest(theRequest)</span><span class="s0">;   </span><span class="s2">// Write HTTP request to log</span>
+        <span class="s0">return </span><span class="s3">&quot;Giang wanted this path&quot;</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">// Method to handle HTTP GET requests for the path &quot;/tuesday/bd6/unit6&quot;</span>
+    <span class="s2">// HttpServletRequest as the first parameter to teh method allows access to HTTP request information</span>
+    <span class="s2">//             using the object name specified</span>
+    <span class="s1">@GetMapping(value=</span><span class="s3">&quot;/tuesday/bd6/unit6&quot;</span><span class="s1">)</span>
+    <span class="s0">public </span><span class="s1">String whatEverYouWant(HttpServletRequest aRequest) {</span>
+        <span class="s1">logRequest(aRequest)</span><span class="s0">;   </span><span class="s2">// Write HTTP request to log</span>
+        <span class="s0">return </span><span class="s3">&quot;Almost done.... getting ready to get employed&quot;</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">// Method to handle HTTP POST requests for the path &quot;/tuesday/bd6/unit6&quot;</span>
+    <span class="s2">// OK to have  the same URL, but it must be for a different HTTP request that other</span>
+    <span class="s2">// HttpServletRequest as the first parameter to teh method allows access to HTTP request information</span>
+    <span class="s2">//             using the object name specified</span>
+    <span class="s1">@PostMapping(value=</span><span class="s3">&quot;/tuesday/bd6/unit6&quot;</span><span class="s1">)</span>
+    <span class="s0">public </span><span class="s1">String whatEverYouWant2(HttpServletRequest theRequest) {</span>
+        <span class="s1">logRequest(theRequest)</span><span class="s0">;   </span><span class="s2">// Write HTTP request to log</span>
+        <span class="s0">return </span><span class="s3">&quot;POST Called to say: Almost done.... getting ready to get employed&quot;</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">// Method to handle HTTP POST requests for path &quot;/ask&quot;</span>
+    <span class="s2">//       with data in the request body</span>
+    <span class="s1">@PostMapping (value=</span><span class="s3">&quot;/ask&quot;</span><span class="s1">)</span>
+    <span class="s2">// HttpServletRequest as the first parameter to the method allows access to HTTP request information</span>
+    <span class="s2">//             using the object name specified</span>
+    <span class="s2">// @RequestBody tells the server to take the JSON from the request body of the request</span>
+    <span class="s2">//              and instantiate an object of the class specified</span>
+    <span class="s2">// Here we are saying take the JSON from the request and instantiate a Question class object</span>
+    <span class="s2">// The throws JsonProcessingException is required due to use of Jackson ObjectWriter to convert object to JSON</span>
+    <span class="s0">public </span><span class="s1">theAnswer answerQuestion(HttpServletRequest aRequest</span><span class="s0">, </span><span class="s1">@RequestBody Question questionAsked) </span><span class="s0">throws </span><span class="s1">JsonProcessingException {</span>
+
+        <span class="s1">logRequest(aRequest)</span><span class="s0">;                                             </span><span class="s2">// Write HTTP request to log</span>
+        <span class="s1">ObjectWriter ow = </span><span class="s0">new </span><span class="s1">ObjectMapper().writer()</span><span class="s0">;                    </span><span class="s2">// Convert object received to JSON</span>
+        <span class="s1">logMessage(</span><span class="s3">&quot;with body: &quot; </span><span class="s1">+ ow.writeValueAsString(questionAsked))</span><span class="s0">; </span><span class="s2">// add data from body of request to log</span>
+
+        <span class="s1">theAnswer theAnswerToTheQuestion = </span><span class="s0">new </span><span class="s1">theAnswer()</span><span class="s0">; </span><span class="s2">// Instantiate object to be returned</span>
+
+        <span class="s0">switch </span><span class="s1">(questionAsked.getTheQuestion()) {</span>
+            <span class="s0">case </span><span class="s3">&quot;Who is teaching Unit 6?&quot;</span><span class="s1">:</span>
+                <span class="s1">theAnswerToTheQuestion.setAnswerReturned(</span><span class="s3">&quot;Frank&quot;</span><span class="s1">)</span><span class="s0">;</span>
+                <span class="s0">break;</span>
+            <span class="s0">case </span><span class="s3">&quot;Who is teaching Unit 3?&quot;</span><span class="s1">:</span>
+                <span class="s1">theAnswerToTheQuestion.setAnswerReturned(</span><span class="s3">&quot;Petar&quot;</span><span class="s1">)</span><span class="s0">;</span>
+                <span class="s0">break;</span>
+            <span class="s0">case </span><span class="s3">&quot;Who is teaching Unit 5?&quot;</span><span class="s1">:</span>
+                <span class="s1">theAnswerToTheQuestion.setAnswerReturned(</span><span class="s3">&quot;Tom&quot;</span><span class="s1">)</span><span class="s0">;</span>
+                <span class="s0">break;</span>
+            <span class="s0">case </span><span class="s3">&quot;Who is teaching Unit 4?&quot;</span><span class="s1">:</span>
+                <span class="s1">theAnswerToTheQuestion.setAnswerReturned(</span><span class="s3">&quot;Mauli&quot;</span><span class="s1">)</span><span class="s0">;</span>
+                <span class="s0">break;</span>
+            <span class="s0">default</span><span class="s1">:</span>
+                <span class="s1">theAnswerToTheQuestion.setAnswerReturned(</span><span class="s3">&quot;I Don't Know&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">}</span>
+        <span class="s0">return </span><span class="s1">theAnswerToTheQuestion</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">// Method to handle HTTP GET requests for path &quot;/ask&quot;</span>
+    <span class="s2">//     with required query parameter &quot;unit=&quot; and optional query parameter &quot;cohort=&quot;</span>
+    <span class="s2">///</span>
+    <span class="s2">// Valid endpoints:  /ask?unit=#</span>
+    <span class="s2">//                   /ask?unit=#&amp;cohort=whatever</span>
+    <span class="s2">//</span>
+    <span class="s1">@GetMapping (value=</span><span class="s3">&quot;/ask&quot;</span><span class="s1">) </span><span class="s2">// Method to handle HTTP POST requests for path &quot;/ask&quot;</span>
+    <span class="s2">// HttpServletRequest as the first parameter to teh method allows access to HTTP request information</span>
+    <span class="s2">//             using the object name specified</span>
+    <span class="s2">// @RequestParam tells the server to take the value from a query parameter in the URL</span>
+    <span class="s2">//              and create a variable of the type specified (query parameters are String)</span>
+    <span class="s2">// Here we are saying String assigned to unit= in the URL and put it in a int called unit</span>
+    <span class="s2">//      and the cohort parameter is optional, but if present assign to a String called cohort</span>
+    <span class="s0">public </span><span class="s1">theAnswer magic8Ball(HttpServletRequest   aRequest</span><span class="s0">,</span>
+                                <span class="s1">@RequestParam </span><span class="s0">int    </span><span class="s1">unit</span><span class="s0">,</span>
+                                <span class="s1">@RequestParam (required=</span><span class="s0">false</span><span class="s1">) String cohort) {</span>
+        <span class="s2">//                                    (default=&quot;value&quot;) instead of required</span>
+
+        <span class="s1">logRequest(aRequest)</span><span class="s0">;   </span><span class="s2">// Write HTTP request to log</span>
+
+        <span class="s1">theAnswer theAnswerToTheQuestion = </span><span class="s0">new </span><span class="s1">theAnswer()</span><span class="s0">; </span><span class="s2">// Instantiate object to be returned</span>
+
+        <span class="s1">String answerString = </span><span class="s3">&quot;For Cohort &quot; </span><span class="s1">+ cohort + </span><span class="s3">&quot; the instructor is &quot;</span><span class="s0">;</span>
+
+        <span class="s0">switch </span><span class="s1">(unit) {</span>
+            <span class="s0">case </span><span class="s4">6</span><span class="s1">:</span>
+                <span class="s1">theAnswerToTheQuestion.setAnswerReturned(answerString + </span><span class="s3">&quot;Frank&quot;</span><span class="s1">)</span><span class="s0">;</span>
+                <span class="s0">break;</span>
+            <span class="s0">case </span><span class="s4">3</span><span class="s1">:</span>
+                <span class="s1">theAnswerToTheQuestion.setAnswerReturned(answerString + </span><span class="s3">&quot;Petar&quot;</span><span class="s1">)</span><span class="s0">;</span>
+                <span class="s0">break;</span>
+            <span class="s0">case </span><span class="s4">5</span><span class="s1">:</span>
+                <span class="s1">theAnswerToTheQuestion.setAnswerReturned(answerString + </span><span class="s3">&quot;Tom&quot;</span><span class="s1">)</span><span class="s0">;</span>
+                <span class="s0">break;</span>
+            <span class="s0">case </span><span class="s4">4</span><span class="s1">:</span>
+                <span class="s1">theAnswerToTheQuestion.setAnswerReturned(answerString + </span><span class="s3">&quot;Mauli&quot;</span><span class="s1">)</span><span class="s0">;</span>
+                <span class="s0">break;</span>
+            <span class="s0">default</span><span class="s1">:</span>
+                <span class="s1">theAnswerToTheQuestion.setAnswerReturned(answerString + </span><span class="s3">&quot;I don't know&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">}</span>
+        <span class="s0">return </span><span class="s1">theAnswerToTheQuestion</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">// Log request with timestamp</span>
+    <span class="s0">private void </span><span class="s1">logRequest(HttpServletRequest theRequest) {</span>
+        <span class="s1">LocalDateTime now = LocalDateTime.now()</span><span class="s0">;</span>
+        <span class="s1">DateTimeFormatter formatter = DateTimeFormatter.ofPattern(</span><span class="s3">&quot;MM/dd/yyyy HH:mm:ss.A&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">String timeNow = now.format(formatter)</span><span class="s0">;</span>
+
+        <span class="s1">System.out.printf(</span><span class="s3">&quot;%s --&gt; %4s %4s request for URL: %s%s</span><span class="s0">\n</span><span class="s3">&quot;</span><span class="s0">,</span>
+                          <span class="s1">timeNow</span>
+                        <span class="s0">, </span><span class="s1">theRequest.getProtocol()</span>
+                        <span class="s0">, </span><span class="s1">theRequest.getMethod()</span>
+                        <span class="s0">, </span><span class="s1">theRequest.getRequestURI()</span>
+                        <span class="s0">, </span><span class="s1">(theRequest.getQueryString() != </span><span class="s0">null </span><span class="s1">? (</span><span class="s3">&quot;?&quot; </span><span class="s1">+ theRequest.getQueryString()) : </span><span class="s3">&quot;&quot;</span><span class="s1">))</span><span class="s0">;</span>
+
+        <span class="s1">}</span>
+
+    <span class="s2">// log a message passed in as a parameter</span>
+    <span class="s0">private void </span><span class="s1">logMessage(String message) {</span>
+        <span class="s1">LocalDateTime now = LocalDateTime.now()</span><span class="s0">;</span>
+        <span class="s1">DateTimeFormatter formatter = DateTimeFormatter.ofPattern(</span><span class="s3">&quot;MM/dd/yyyy HH:mm:ss.A&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">String timeNow = now.format(formatter)</span><span class="s0">;</span>
+
+        <span class="s1">System.out.printf(</span><span class="s3">&quot;%s --&gt; %s</span><span class="s0">\n</span><span class="s3">&quot;</span><span class="s0">, </span><span class="s1">timeNow</span><span class="s0">, </span><span class="s1">message)</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s1">}</span>
+
+
+
+</pre>
+</body>
+</html>
